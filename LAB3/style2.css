@@ -1,0 +1,99 @@
+/* Full-width black header bar */
+.header {
+  display: flex;                 /* put items in one row */
+  align-items: center;           /* vertical center */
+  background: #000;              /* black background */
+  color: #fff;                   /* white text */
+  padding: 12px 20px;
+  gap: 20px;                     /* space between items */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Push the nav items (h2s) to the right */
+.header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* This makes everything after h1 stay on the right */
+.header h1 + h2 {
+  margin-left: auto;
+}
+
+/* Optional: make h2 look like nav items with hover */
+.header h2 {
+  cursor: pointer;
+}
+.header h2:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+    
+/* Optional: better sizing defaults */
+* { box-sizing: border-box; }
+
+.content {
+  display: flex;              /* put children in a row */
+  gap: 20px;                  /* space between cards */
+  justify-content: space-between; /* spread them out */
+  align-items: stretch;       /* same height cards */
+  padding: 16px;
+  max-width: 1200px;          /* center on large screens */
+  margin: 0 auto;
+}
+
+.content > div {
+  flex: 1 1 300px;            /* Gives it a larger base width */
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;        /* Slightly rounder for larger cards */
+  padding: 24px;              /* More breathing room */
+  text-align: center;
+  box-shadow: 10px 8px 12px rgba(0,0,0,0.05);
+  
+  /* Merged your transitions into one clean line */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; 
+}
+
+.content > div:hover {
+  transform: translateY(-5px); /* Makes it pop "up" when hovering */
+  box-shadow: 10px 12px 20px rgba(0,0,0,0.1);
+}
+
+/* Make images responsive inside the cards */
+.content img {
+  width: 100%;
+  height: auto;               /* keep aspect ratio */
+  border-radius: 10px;
+  display: block;       /* remove bottom space */
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+}
+
+
+.description{
+  display: flex;
+  margin-top: 50px;     
+  justify-content: center;/* center items horizontally */
+  align-items: center;        /* center items vertically */
+  text-align: center;            /* put items in one row */
+  background: #d5cccc;              /* black background */
+  color: #211b1b;                   /* white text */
+  padding: 12px 20px;       
+  gap: 20px;    
+  height: 60px;                 /* space between items */
+  width: 100%;
+  box-sizing: border-box;
+}
