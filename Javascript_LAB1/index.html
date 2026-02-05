@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercises Combined</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h2 {
+      margin-top: 30px;
+    }
+    input, button {
+      padding: 5px 10px;
+      margin: 5px 0;
+    }
+    #colorResult {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    #currentTime {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Exercise 1: Leap Year Checker -->
+  <h2>Leap Year Checker</h2>
+  <input type="number" id="yearInput" placeholder="Enter a year">
+  <button onclick="checkLeapYear()">Check</button>
+  <p id="result"></p>
+
+  <!-- Exercise 2: Color Array -->
+  <h2>Colors Array</h2>
+  <button onclick="showColors()">Show Colors</button>
+  <p id="colorResult"></p>
+
+  <!-- Exercise 3: Greeting with Time -->
+  <h2>Greeting & Current Time</h2>
+  <p id="currentTime"></p>
+  <p id="greeting"></p>
+
+  <script>
+    // Exercise 1: Leap Year Checker
+    function checkLeapYear() {
+      const year = document.getElementById("yearInput").value;
+      const result = document.getElementById("result");
+
+      if (year === "") {
+        result.textContent = "Please enter a year.";
+        return;
+      }
+
+      if ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) {
+        result.textContent = year + " is a leap year.";
+      } else {
+        result.textContent = year + " is not a leap year.";
+      }
+    }
+
+    // Exercise 2: Color Array Join
+    function showColors() {
+      const colors = ["Red", "Green", "White", "Black"];
+      const result = colors.join(", ");
+      document.getElementById("colorResult").textContent = result;
+      console.log(result);
+    }
+
+    // Exercise 3: Greeting with Current Time
+    function updateTimeAndGreeting() {
+      const now = new Date();
+      const hour = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      const seconds = now.getSeconds().toString().padStart(2, "0");
+
+      // Update current time
+      const timeString = `${hour}:${minutes}:${seconds}`;
+      document.getElementById("currentTime").textContent = "Current Time: " + timeString;
+
+      // Update greeting
+      const greetingElement = document.getElementById("greeting");
+      if (hour >= 5 && hour < 12) {
+        greetingElement.textContent = "Good Morning";
+      } else if (hour >= 12 && hour < 18) {
+        greetingElement.textContent = "Good Afternoon";
+      } else {
+        greetingElement.textContent = "Good Evening";
+      }
+    }
+
+    // Update every second
+    setInterval(updateTimeAndGreeting, 1000);
+
+    // Initial call
+    updateTimeAndGreeting();
+  </script>
+
+</body>
+</html>
