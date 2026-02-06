@@ -28,24 +28,24 @@
 </head>
 <body>
 
-  <!-- Exercise 1: Leap Year Checker -->
+  <!-- leap year -->
   <h2>Leap Year Checker</h2>
   <input type="number" id="yearInput" placeholder="Enter a year">
   <button onclick="checkLeapYear()">Check</button>
   <p id="result"></p>
 
-  <!-- Exercise 2: Color Array -->
+  <!-- Color Array -->
   <h2>Colors Array</h2>
   <button onclick="showColors()">Show Colors</button>
   <p id="colorResult"></p>
 
-  <!-- Exercise 3: Greeting with Time -->
+  <!-- Greeting with Time -->
   <h2>Greeting & Current Time</h2>
   <p id="currentTime"></p>
   <p id="greeting"></p>
 
   <script>
-    // Exercise 1: Leap Year Checker
+    // Leap Year Checker
     function checkLeapYear() {
       const year = document.getElementById("yearInput").value;
       const result = document.getElementById("result");
@@ -62,7 +62,7 @@
       }
     }
 
-    // Exercise 2: Color Array Join
+    // Color Array Join
     function showColors() {
       const colors = ["Red", "Green", "White", "Black"];
       const result = colors.join(", ");
@@ -70,7 +70,7 @@
       console.log(result);
     }
 
-    // Exercise 3: Greeting with Current Time
+    // Greeting with Current Time
     function updateTimeAndGreeting() {
       const now = new Date();
       const hour = now.getHours();
