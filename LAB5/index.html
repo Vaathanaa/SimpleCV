@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cybersecurity & API Demo</title>
+
+  <!-- Tailwind + DaisyUI -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.0/dist/full.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-base-200 p-6 space-y-10">
+
+<!-- ===================================================== -->
+<!-- I. TABNAPPING DEMONSTRATION -->
+<!-- ===================================================== -->
+<section class="bg-base-100 p-6 rounded shadow">
+  <h2 class="text-2xl font-bold mb-4">I. Tabnapping Demonstration</h2>
+
+  <p class="mb-4">
+     For <strong>educational purposes only</strong>.  
+    This demonstrates how <code>window.opener</code> can be abused.
+  </p>
+
+  <!-- Scenario A -->
+  <div class="mb-6">
+    <h3 class="text-xl font-semibold mb-2">Scenario A</h3>
+    <p class="mb-2">
+      Page A opens Page B → Page B redirects Page A to Page C.
+    </p>
+
+    <!-- Vulnerable Link -->
+    <a href="#" class="btn btn-error"
+       onclick="openScenarioA()">
+      Open Page B (Vulnerable)
+    </a>
+  </div>
+
+  <!-- Scenario B -->
+  <div>
+    <h3 class="text-xl font-semibold mb-2">Scenario B</h3>
+    <p class="mb-2">
+      Page B opens and redirects itself after a few seconds.
+    </p>
+
+    <a href="#" class="btn btn-warning"
+       onclick="openScenarioB()">
+      Open Page B (Delayed Redirect)
+    </a>
+  </div>
+
+  <div class="mt-6 p-4 bg-warning text-warning-content rounded">
+    <strong>Prevention:</strong><br>
+    Always use:
+    <code>&lt;a target="_blank" rel="noopener noreferrer"&gt;</code>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- II. CAMBODIAN ADDRESS SELECTOR -->
+<!-- ===================================================== -->
+<section class="bg-base-100 p-6 rounded shadow">
+  <h2 class="text-2xl font-bold mb-4">
+    II. Cambodian Administrative Division Selector
+  </h2>
+
+  <div class="max-w-md space-y-3">
+    <select id="province" class="select select-bordered w-full">
+      <option value="">Select Province</option>
+    </select>
+
+    <select id="district" class="select select-bordered w-full" disabled>
+      <option value="">Select District</option>
+    </select>
+
+    <select id="commune" class="select select-bordered w-full" disabled>
+      <option value="">Select Commune</option>
+    </select>
+
+    <select id="village" class="select select-bordered w-full" disabled>
+      <option value="">Select Village</option>
+    </select>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- JAVASCRIPT -->
+<!-- ===================================================== -->
+<script>
+/* ===============================
+   TABNAPPING DEMO
+================================ */
+
+// Fake Page C (phishing page simulation)
+function showPageC(win) {
+  win.document.write(`
+    <h1 style="color:red;">⚠️ Fake Login Page (Page C)</h1>
+    <p>This simulates a tabnapping attack.</p>
+  `);
+}
+
+// Scenario A
+function openScenarioA() {
+  const pageB = window.open("", "_blank");
+
+  pageB.document.write(`
+    <h1>Page B</h1>
+    <p>This page hijacks Page A using window.opener.</p>
+
+    <script>
+      if (window.opener) {
+        window.opener.document.body.innerHTML =
+          "<h1 style='color:red'>⚠️ Page A Hijacked!</h1><p>Redirected to Page C</p>";
+      }
+    <\/script>
+  `);
+}
+
+// Scenario B
+function openScenarioB() {
+  const pageB = window.open("", "_blank");
+
+  pageB.document.write(`
+    <h1>Legitimate Page B</h1>
+    <p>Redirecting in 4 seconds...</p>
+
+    <script>
+      setTimeout(() => {
+        document.body.innerHTML =
+          "<h1 style='color:red'>⚠️ Redirected to Page C</h1>";
+      }, 4000);
+    <\/script>
+  `);
+}
+
+/* ===============================
+   CAMBO GAZETTEER API
+================================ */
+
+const API_BASE =
+  "https://corsproxy.io/?https://cambo-gazetteer.manethpak.dev/api/v1";
+
+const province = document.getElementById("province");
+const district = document.getElementById("district");
+const commune = document.getElementById("commune");
+const village = document.getElementById("village");
+
+async function fetchData(url) {
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.data;
+}
+
+function resetSelect(select, label) {
+  select.innerHTML = `<option value="">Select ${label}</option>`;
+  select.disabled = true;
+}
+
+// Load Provinces
+async function loadProvinces() {
+  const data = await fetchData(`${API_BASE}/provinces`);
+  data.forEach(p => {
+    province.innerHTML += `<option value="${p.id}">${p.name_en}</option>`;
+  });
+}
+
+// Province → District
+province.addEventListener("change", async () => {
+  resetSelect(district, "District");
+  resetSelect(commune, "Commune");
+  resetSelect(village, "Village");
+
+  if (!province.value) return;
+
+  district.disabled = false;
+  const data = await fetchData(
+    `${API_BASE}/districts?province=${province.value}`
+  );
+
+  data.forEach(d => {
+    district.innerHTML += `<option value="${d.id}">${d.name_en}</option>`;
+  });
+});
+
+// District → Commune
+district.addEventListener("change", async () => {
+  resetSelect(commune, "Commune");
+  resetSelect(village, "Village");
+
+  if (!district.value) return;
+
+  commune.disabled = false;
+  const data = await fetchData(
+    `${API_BASE}/communes?district=${district.value}`
+  );
+
+  data.forEach(c => {
+    commune.innerHTML += `<option value="${c.id}">${c.name_en}</option>`;
+  });
+});
+
+// Commune → Village
+commune.addEventListener("change", async () => {
+  resetSelect(village, "Village");
+
+  if (!commune.value) return;
+
+  village.disabled = false;
+  const data = await fetchData(
+    `${API_BASE}/villages?commune=${commune.value}`
+  );
+
+  data.forEach(v => {
+    village.innerHTML += `<option value="${v.id}">${v.name_en}</option>`;
+  });
+});
+
+// Initialize
+loadProvinces();
+</script>
+
+</body>
+</html>
