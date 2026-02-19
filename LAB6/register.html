@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Registration</title>
+
+    <style>
+      /* PAGE BACKGROUND + CENTERING */
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        background: #e80000; /* red page */
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px 16px;
+      }
+
+      .page-content {
+        width: 100%;
+        max-width: 620px;
+      }
+
+      /* WHITE CARD FORM */
+      form {
+        background: #fff;
+        width: 100%;
+        max-width: 620px;
+        border-radius: 8px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 26px;
+      }
+
+      /* HEADING */
+      h1 {
+        margin-top: 0;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #765e5e;
+      }
+
+      /* LABEL ABOVE INPUT */
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #222;
+        font-size: 18px;
+      }
+
+      /* FORM GROUPS */
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      /* TWO-COLUMN ROWS */
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* two equal columns */
+        gap: 22px;
+        margin-bottom: 18px;
+        align-items: start;
+      }
+      .form-row > div {
+        display: flex;
+        flex-direction: column;
+        min-width: 0; /* prevents overflow in grid */
+      }
+      .full-span {
+        grid-column: 1 / -1;
+      }
+
+      /* INPUTS / SELECTS / TEXTAREA */
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="date"],
+      select,
+      textarea,
+      input[type="file"] {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid #9b9b9b;
+        border-radius: 6px;
+        font-size: 17px;
+        background: #fff;
+      }
+
+      input[type="file"] {
+        padding: 8px;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(232, 0, 0, 0.07);
+        border-color: #e80000;
+      }
+
+      /* file selector button styling */
+      input[type="file"]::file-selector-button {
+        border: none;
+        background: #f4f4f4;
+        padding: 8px 10px;
+        border-radius: 4px;
+        margin-right: 8px;
+      }
+
+      /* Radio & checkbox inline layout */
+      .inline-group {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+      }
+      .inline-group label {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        font-weight: 500;
+      }
+      input[type="radio"],
+      input[type="checkbox"] {
+        width: auto;
+      }
+      .hobbies-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 2 columns */
+        gap: 12px 20px; /* row-gap 12px, column-gap 20px */
+      }
+      .hobbies-grid label {
+        display: flex;
+        align-items: center;
+        gap: 8px; /* space between checkbox and text */
+      }
+
+      /* Address */
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      /* SUBMIT BUTTON */
+      button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background: #e80000;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 14px;
+      }
+      button:hover {
+        background: #c70000;
+      }
+
+      .saved-users {
+        background: #fff;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 26px;
+        margin-top: 16px;
+      }
+
+      .saved-users h2 {
+        margin: 0 0 12px;
+        color: #765e5e;
+      }
+
+      .saved-users ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .saved-users li {
+        border: 1px solid #9b9b9b;
+        border-radius: 6px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      .saved-users p {
+        margin: 0 0 6px;
+      }
+
+      .delete-btn {
+        width: auto;
+        margin-top: 0;
+        display: inline-block;
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+
+      /* RESPONSIVE: stack columns on small screens */
+      @media (max-width: 640px) {
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 22px;
+        }
+        form {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-content">
+      <form id="registerForm" action="/submit_registration" method="post">
+        <h1>Student Registration Form</h1>
+        <div class="form-group">
+          <label for="fullName"><strong>Full Name</strong></label>
+          <input type="text" id="fullName" name="fullName" required />
+        </div>
+
+        <div class="form-group">
+          <label for="email"><strong>Email</strong></label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password"><strong>Password</strong></label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <button type="submit">Submit</button>
+        <button id="logoutBtn" type="button">Logout</button>
+      </form>
+
+      <section class="saved-users">
+        <h2>Saved Users</h2>
+        <ul id="usersList"></ul>
+      </section>
+    </div>
+    <script>
+      if (!document.cookie.includes("studentEmail=")) {
+        window.location.href = "login.html";
+      }
+
+      const registerForm = document.getElementById("registerForm");
+      const usersList = document.getElementById("usersList");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      function getUsers() {
+        return JSON.parse(localStorage.getItem("users")) || [];
+      }
+
+      function renderUsers() {
+        const users = getUsers();
+
+        if (users.length === 0) {
+          usersList.innerHTML = "<li>No data in localStorage.</li>";
+          return;
+        }
+
+        usersList.innerHTML = users
+          .map(
+            (user, index) =>
+              `<li>
+                <p><strong>Full Name:</strong> ${user.fullName}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <button class="delete-btn" data-index="${index}" type="button">Delete</button>
+              </li>`
+          )
+          .join("");
+      }
+
+      function deleteUser(index) {
+        const users = getUsers();
+        users.splice(index, 1);
+        localStorage.setItem("users", JSON.stringify(users));
+        renderUsers();
+      }
+
+      usersList.addEventListener("click", function (e) {
+        if (e.target.classList.contains("delete-btn")) {
+          deleteUser(Number(e.target.dataset.index));
+        }
+      });
+
+      logoutBtn.addEventListener("click", function () {
+        document.cookie =
+          "studentEmail=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax";
+        window.location.href = "login.html";
+      });
+
+      registerForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const newUser = {
+          fullName: document.getElementById("fullName").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value,
+          createdAt: new Date().toISOString(),
+        };
+
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+
+        alert("Registration data saved to localStorage!");
+        registerForm.reset();
+        renderUsers();
+      });
+
+      renderUsers();
+    </script>
+  </body>
+</html>
