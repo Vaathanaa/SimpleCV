@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurse Page</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        background: #f5f5f5;
+        color: #222;
+        padding: 20px;
+      }
+
+      .page-container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .page-header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .session-btn {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #fff;
+        color: #222;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+
+      .session-btn:hover {
+        background: #eee;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+      }
+
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: 1.05rem;
+      }
+
+      .card p {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      .patient-alert {
+        border-left: 4px solid #d9534f;
+      }
+
+      .bed-availability {
+        border-left: 4px solid #337ab7;
+      }
+
+      .medication-orders {
+        border-left: 4px solid #f0ad4e;
+      }
+
+      .database-status {
+        border-left: 4px solid #5cb85c;
+      }
+
+      .users-card {
+        grid-column: 1 / -1;
+      }
+
+      .users-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .users-list li {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 10px;
+        background: #fafafa;
+      }
+
+      .users-list p {
+        margin: 4px 0;
+      }
+
+      .delete-btn {
+        margin-top: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #fff;
+        color: #222;
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+
+      .delete-btn:hover {
+        background: #eee;
+      }
+    </style>
+</head>
+<body>
+    <main class="page-container">
+      <header class="page-header">
+        <h1>Nurse Dashboard</h1>
+        <button id="clearSessionBtn" class="session-btn" type="button">Delete Cookie Session</button>
+      </header>
+
+      <section class="dashboard-grid">
+        <article class="card patient-alert">
+          <h2>Patient Alert</h2>
+          <p>Total Patients: 10</p>
+        </article>
+
+        <article class="card bed-availability">
+          <h2>Bed Availability</h2>
+          <p>Available Beds: 15</p>
+        </article>
+
+        <article class="card medication-orders">
+          <h2>Medication Reminders</h2>
+          <p>Next Medication: 2:00 PM</p>
+        </article>
+
+        <article class="card database-status">
+          <h2>Database Status</h2>
+          <p>Last Update: 10:30 AM</p>
+        </article>
+
+        <article class="card users-card">
+          <h2>Registered Users</h2>
+          <ul id="usersList" class="users-list"></ul>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      function hasSessionCookie() {
+        return document.cookie
+          .split(";")
+          .map((cookie) => cookie.trim())
+          .some((cookie) => cookie.startsWith("email="));
+      }
+
+      if (!hasSessionCookie()) {
+        window.location.href = "login.html";
+      }
+
+      function getUsers() {
+        return JSON.parse(localStorage.getItem("users")) || [];
+      }
+
+      function deleteUser(index) {
+        const users = getUsers();
+        users.splice(index, 1);
+        localStorage.setItem("users", JSON.stringify(users));
+        renderUsers();
+      }
+
+      function renderUsers() {
+        const usersList = document.getElementById("usersList");
+        const users = getUsers();
+
+        if (users.length === 0) {
+          usersList.innerHTML = "<li>No data in localStorage.</li>";
+          return;
+        }
+
+        usersList.innerHTML = users
+          .map(
+            (user, index) =>
+              `<li>
+                <p><strong>Full Name:</strong> ${user.fullName}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <button class="delete-btn" data-index="${index}" type="button">Delete</button>
+              </li>`
+          )
+          .join("");
+      }
+
+      function clearCookieSession() {
+        document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "email=; max-age=0; path=/;";
+        sessionStorage.clear();
+        window.location.href = "login.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        renderUsers();
+
+        document.getElementById("usersList").addEventListener("click", function (event) {
+          const button = event.target.closest(".delete-btn");
+          if (!button) return;
+          const index = Number(button.dataset.index);
+          deleteUser(index);
+        });
+
+        document.getElementById("clearSessionBtn").addEventListener("click", clearCookieSession);
+      });
+      </script> 
+</body>
+</html> 

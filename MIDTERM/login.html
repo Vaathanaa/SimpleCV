@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+
+    <style>
+      /* PAGE BACKGROUND + CENTERING */
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        background: #e80000;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px 16px;
+      }
+
+      /* WHITE CARD FORM */
+      form {
+        background: #fff;
+        width: 100%;
+        max-width: 420px;
+        border-radius: 8px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 26px;
+      }
+
+      /* HEADING */
+      h1 {
+        margin-top: 0;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #765e5e;
+      }
+
+      /* LABEL ABOVE INPUT */
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #222;
+        font-size: 18px;
+      }
+      /*show password checkbox*/
+      .show-password {
+        margin-top: 10px;
+      }
+      .show-password input {
+        margin-right: 6px;
+      }
+      /* FORM GROUPS */
+      .form-group {
+        margin-bottom: 18px;
+      }
+      /* Role selection */
+      .Role-selection {
+        margin-bottom: 18px;
+      }
+      .Role-selection select {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid #9b9b9b;
+        border-radius: 6px;
+        font-size: 17px;
+        background: #fff;
+      }
+      /* INPUTS */  
+      input[type="text"],
+      input[type="password"],
+      input[type="email"] {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid #9b9b9b;
+        border-radius: 6px;
+        font-size: 17px;
+        background: #fff;
+      }
+
+      input:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(232, 0, 0, 0.07);
+        border-color: #e80000;
+      }
+
+      /* SUBMIT BUTTON */
+      button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background: #e80000;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 14px;
+      }
+      button:hover {
+        background: #c70000;
+      }
+      /* Back to landing page link */
+      .back-to-landing-page {
+        margin-top: 12px;
+        text-align: center;
+      }
+      .back-to-landing-page a {
+        color: #e80000;
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .back-to-landing-page a:hover {
+      /* RESPONSIVE */
+      @media (max-width: 640px) {
+        h1 {
+          font-size: 22px;
+        }
+        form {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <form id="loginForm" action="/login" method="post">
+      <h1>Student Login</h1>
+
+      <div class="form-group">
+        <label for="email"><strong>Email</strong></label>
+        <input type="email" id="email" name="email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password"><strong>Password</strong></label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div class="Role-selection">
+        <label for="role"><strong>Role</strong></label>
+        <select id="role" name="role" required>
+          <option value="">Select Role</option>
+          <option value="Nurse">Nurse</option>
+          <option value="admin">Admin</option>
+        </select>
+        </div>  
+        <div class="show-password">
+          <input type="checkbox" id="showPassword" />
+          <label for="showPassword">Show Password</label>
+        </div>
+      <button type="submit">Login</button>
+      <div class="back-to-landing-page">
+        <a href="Landing.html">Back to Landing Page</a>
+    </form>
+    <script>
+      const showPasswordCheckbox = document.getElementById("showPassword");
+      const passwordInput = document.getElementById("password");
+
+      showPasswordCheckbox.addEventListener("change", function () {
+        if (this.checked) {
+          passwordInput.type = "text";
+        } else {
+          passwordInput.type = "password";
+        }
+      });
+    </script>
+    <script>
+      const loginForm = document.getElementById("loginForm");
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+
+        document.cookie =
+          "email=" +
+          encodeURIComponent(email) +
+          "; max-age=86400; path=/; SameSite=Lax";
+        
+        if (document.getElementById("role").value === "Nurse") {
+          window.location.href = "Nurse.html";
+        } else if (document.getElementById("role").value === "admin") {
+          window.location.href = "admin.html";
+        }
+      });
+    </script>
+  </body>
+</html>
