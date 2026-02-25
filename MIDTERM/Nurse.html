@@ -85,43 +85,6 @@
       .database-status {
         border-left: 4px solid #5cb85c;
       }
-
-      .users-card {
-        grid-column: 1 / -1;
-      }
-
-      .users-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        gap: 10px;
-      }
-
-      .users-list li {
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        padding: 10px;
-        background: #fafafa;
-      }
-
-      .users-list p {
-        margin: 4px 0;
-      }
-
-      .delete-btn {
-        margin-top: 8px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        background: #fff;
-        color: #222;
-        padding: 6px 10px;
-        cursor: pointer;
-      }
-
-      .delete-btn:hover {
-        background: #eee;
-      }
     </style>
 </head>
 <body>
@@ -151,11 +114,6 @@
           <h2>Database Status</h2>
           <p>Last Update: 10:30 AM</p>
         </article>
-
-        <article class="card users-card">
-          <h2>Registered Users</h2>
-          <ul id="usersList" class="users-list"></ul>
-        </article>
       </section>
     </main>
 
@@ -171,38 +129,6 @@
         window.location.href = "login.html";
       }
 
-      function getUsers() {
-        return JSON.parse(localStorage.getItem("users")) || [];
-      }
-
-      function deleteUser(index) {
-        const users = getUsers();
-        users.splice(index, 1);
-        localStorage.setItem("users", JSON.stringify(users));
-        renderUsers();
-      }
-
-      function renderUsers() {
-        const usersList = document.getElementById("usersList");
-        const users = getUsers();
-
-        if (users.length === 0) {
-          usersList.innerHTML = "<li>No data in localStorage.</li>";
-          return;
-        }
-
-        usersList.innerHTML = users
-          .map(
-            (user, index) =>
-              `<li>
-                <p><strong>Full Name:</strong> ${user.fullName}</p>
-                <p><strong>Email:</strong> ${user.email}</p>
-                <button class="delete-btn" data-index="${index}" type="button">Delete</button>
-              </li>`
-          )
-          .join("");
-      }
-
       function clearCookieSession() {
         document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         document.cookie = "email=; max-age=0; path=/;";
@@ -211,15 +137,6 @@
       }
 
       document.addEventListener("DOMContentLoaded", function () {
-        renderUsers();
-
-        document.getElementById("usersList").addEventListener("click", function (event) {
-          const button = event.target.closest(".delete-btn");
-          if (!button) return;
-          const index = Number(button.dataset.index);
-          deleteUser(index);
-        });
-
         document.getElementById("clearSessionBtn").addEventListener("click", clearCookieSession);
       });
       </script> 
